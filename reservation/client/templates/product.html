@@ -1,5 +1,12 @@
 {%block 'body'%}
+{% include 'header.html' %}
+<h1>Product Page</h1>
+<form method="post" action="{% url 'addproduct' %}">
+    {% csrf_token %}
+    {{ pro.as_p }}
 
+    <button type="submit">Submit</button>
+</form>
 <p>Number of Products : {{ pro }}</p>
-
+</form>
 {%enblock%}
