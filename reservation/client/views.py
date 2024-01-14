@@ -4,8 +4,32 @@ from django.shortcuts import render,redirect
 from django import forms
 from .models import order,Client,product,ClientTypes
 from .forms import orderforms,clientforms,clienttypeforms,productforms
+from django.contrib.auth import login, authenticate
+from .forms import RegistrationForm, LoginForm
 
+def register(request):
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+    else:
+        form = RegistrationForm()
 
+    return render(request, 'register.html', {'form': form})
+
+def user_login(request):
+    if request.method == 'POST':
+        form = LoginForm(request, request.POST)
+        if form.is_valid():
+            user = authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password'])
+            if user:
+                login(request, user)
+                return redirect('home')  # Redirect to your home page
+    else:
+        form = LoginForm()
+
+    return render(request, 'login.html', {'form': form})
 
 
 def validate_login (view_function):
